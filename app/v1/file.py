@@ -11,13 +11,13 @@ import string
 import random
 import asyncio
 import os
-from data_operator.zerog.operator import ZeroGStorageClient
+from data_operator.zerog.operator import ZeroGOperator
 
 file_router = APIRouter(prefix="/file")
 
 UPLOAD_DIRECTORY = "./uploads"
 
-zerog_storage_client = ZeroGStorageClient("http://3.87.11.89:5678")
+zerog_operator = ZeroGOperator("http://3.87.11.89:5678")
 
 
 @file_router.post("", status_code=201)
@@ -39,7 +39,7 @@ async def upload_file(
         f.write(contents)
     fhe_task = asyncio.create_task(fhe_encrypt(UPLOAD_DIRECTORY, file_name))
     if chain_option == "0G":
-        asyncio.create_task(zerog_storage_client.upload_file(fhe_task))
+        asyncio.create_task(zerog_operator.register_file(fhe_task))
     return {"message": "File uploaded successfully", "file_name": file_name}
 
 
@@ -47,6 +47,9 @@ async def upload_file(
 async def get_file(file_name: str):
     file_path = f"{ENCRYPTED_DIRECTORY}/encrypted-{file_name}"
     if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
+        raise HTTPException(
+            status_code=404,
+            detail="File not found, if you have uploaded the file, please wait for the encryption to complete.",
+        )
     asyncio.create_task(delete_file(file_name))
     return FileResponse(file_path)
