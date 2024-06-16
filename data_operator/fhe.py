@@ -33,6 +33,7 @@ async def fhe_encrypt(file_path: str, file_name: str):
     if not os.path.exists(ENCRYPTED_DIRECTORY):
         os.makedirs(ENCRYPTED_DIRECTORY)
     df_entrypted.save(f"{ENCRYPTED_DIRECTORY}/encrypted-{file_name}")
+    print('file_name:', file_name)
     return f"{ENCRYPTED_DIRECTORY}/encrypted-{file_name}"
 
 
