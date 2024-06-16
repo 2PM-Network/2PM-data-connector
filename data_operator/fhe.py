@@ -3,7 +3,7 @@ from concrete.ml.pandas import ClientEngine
 import os
 import asyncio
 
-client = ClientEngine(keys_path="2pm-key")
+client = ClientEngine(keys_path="./key/2pm-key")
 
 ENCRYPTED_DIRECTORY = "./encrypted"
 
