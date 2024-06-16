@@ -4,7 +4,6 @@ from typing import Optional
 from data_operator import (
     validate_file_type,
     fhe_encrypt,
-    upload_file_to_0g,
     delete_file,
     ENCRYPTED_DIRECTORY,
 )
@@ -12,10 +11,13 @@ import string
 import random
 import asyncio
 import os
+from data_operator.zerog.operator import ZeroGStorageClient
 
 file_router = APIRouter(prefix="/file")
 
 UPLOAD_DIRECTORY = "./uploads"
+
+zerog_storage_client = ZeroGStorageClient("http://3.87.11.89:5678")
 
 
 @file_router.post("", status_code=201)
@@ -37,7 +39,7 @@ async def upload_file(
         f.write(contents)
     fhe_task = asyncio.create_task(fhe_encrypt(UPLOAD_DIRECTORY, file_name))
     if chain_option == "0G":
-        asyncio.create_task(upload_file_to_0g(fhe_task))
+        asyncio.create_task(zerog_storage_client.upload_file(fhe_task))
     return {"message": "File uploaded successfully", "file_name": file_name}
 
 

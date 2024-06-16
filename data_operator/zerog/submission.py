@@ -192,13 +192,6 @@ def generate_merkle_tree_by_batch(data):
     return tree, add_0x_prefix(tree.decode_value(tree.get_root_hash()))
 
 
-def submit_data(client, data):
-    segments = data_to_segments(data)
-    for segment in segments:
-        client.zgs_upload_segment(segment)
-    return segments
-
-
 def data_to_segments(data):
     tree, root_hash = generate_merkle_tree_by_batch(data)
     chunks = bytes_to_entries(len(data))
