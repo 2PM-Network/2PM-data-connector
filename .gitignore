@@ -1,5 +1,8 @@
 key/
 encrypted/
 **/__pycache__
+**/**/__pycache__
+uploads/
 **/*.pyc
 test.py
+
